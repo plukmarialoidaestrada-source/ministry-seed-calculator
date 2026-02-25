@@ -6,281 +6,260 @@
     <title>Ministry Seed Calculator</title>
     <style>
         :root {
-            --bg-color: #f0f4f8;
-            --card-color: #ffffff;
             --primary-green: #27ae60;
+            --bg-color: #f4f7f6;
             --text-dark: #2c3e50;
+            --accent-orange: #e67e22;
         }
         body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: var(--bg-color);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             margin: 0;
             padding: 20px;
-            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
         }
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        canvas {
-            background-color: var(--card-color);
+        .container {
+            background: white;
+            padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            max-width: 100%;
-            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
         }
-        .instructions {
-            margin-top: 15px;
+        h1, h2 {
+            color: var(--primary-green);
+            margin-top: 0;
+        }
+        h2 {
+            font-size: 1.1rem;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 5px;
+            margin-top: 25px;
+        }
+        .input-group {
+            display: grid;
+            grid-template-columns: 1fr 140px;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        label { font-size: 0.85rem; font-weight: 500; }
+        input, select {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: right;
+            font-family: inherit;
+            background: white;
             font-size: 0.9rem;
-            color: #7f8c8d;
-            text-align: center;
-            max-width: 400px;
         }
+        .result-box {
+            background: #f9fbf9;
+            border-left: 5px solid var(--primary-green);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .harvest-box {
+            background: #fffaf0;
+            border-left: 5px solid var(--accent-orange);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .summary-footer {
+            background: var(--primary-green);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-top: 30px;
+        }
+        .summary-footer h3 { margin: 0; font-size: 1.1rem; }
+        .summary-footer .final-amount { font-size: 2.2rem; display: block; margin-top: 5px; font-weight: bold; }
+        .quote { font-style: italic; font-size: 0.85rem; color: #7f8c8d; text-align: center; margin-bottom: 20px; }
+        .small-note { font-size: 0.7rem; color: #7f8c8d; line-height: 1.3; margin-top: 10px; }
+        .highlight-val { font-weight: bold; color: var(--text-dark); }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1 style="margin:0; color: #27ae60;">🌱 Ministry Seed Calculator</h1>
-        <p style="margin:5px 0;">Ang maliit na seed ngayon, maganDANG harvest bukas.</p>
+<div class="container">
+    <div style="text-align:center;">
+        <h1>🌱 Ministry Seed Calculator</h1>
+        <p class="quote">"Ang maliit na seed ngayon, maganDANG harvest bukas."</p>
     </div>
 
-    <canvas id="calcCanvas" width="450" height="780"></canvas>
-
-    <div class="instructions">
-        Click on the <b>[ - ]</b> and <b>[ + ]</b> icons to adjust your numbers and see your harvest grow in real-time.
+    <!-- STEP 1 -->
+    <h2>STEP 1: MY CURRENT REALITY & POSSIBILITY</h2>
+    <div class="input-group">
+        <label>Monthly Allowance / Income (₱):</label>
+        <input type="number" id="income" value="20000" oninput="updateCalculations()">
     </div>
+    <div class="input-group">
+        <label>Target Years to Harvest:</label>
+        <select id="years" onchange="updateCalculations()">
+            <option value="5">5 years</option>
+            <option value="10">10 years</option>
+            <option value="15">15 years</option>
+            <option value="20" selected>20 years</option>
+        </select>
+    </div>
+    <div class="input-group">
+        <label>Seed Percentage:</label>
+        <select id="seedPct" onchange="updateCalculations()">
+            <option value="0.05" selected>5%</option>
+            <option value="0.10">10%</option>
+        </select>
+    </div>
+
+    <!-- STEP 2: HARVEST GOAL (Based on Excel Step 2) -->
+    <h2>STEP 2: MY HARVEST GOAL (RESULT)</h2>
+    <div class="harvest-box">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
+            <span>Monthly Seed from Income:</span>
+            <span id="monthlySeedIncome" class="highlight-val">₱1,000</span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: #666;">
+            <span>Your Daily Seed:</span>
+            <span id="dailySeed" class="highlight-val">₱33.33</span>
+        </div>
+        <div style="border-top: 1px dashed #ddd; padding-top: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: bold; color: var(--accent-orange); font-size: 0.9rem;">ESTIMATED HARVEST (5% growth*):</span>
+                <span id="step2Harvest" style="font-weight: bold; color: var(--accent-orange); font-size: 1.1rem;">₱411,034</span>
+            </div>
+            <p class="small-note">*Note: Ginamit natin ang 5% bilang conservative estimate. Ito ang power ng consistency!</p>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <h2>STEP 3: MY DIGNITY FUND CHECKLIST</h2>
+    <div class="input-group">
+        <label>🍲 Pagkain kada buwan:</label>
+        <input type="number" id="food" value="9000" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>💡 Tubig, Kuryente & Connectivity:</label>
+        <input type="number" id="utilities" value="2000" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>💊 Maintenance & Health:</label>
+        <input type="number" id="health" value="5000" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>🚗 Pamasahe o Gasolina:</label>
+        <input type="number" id="travel" value="1000" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>🎁 Ministry Support:</label>
+        <input type="number" id="ministry" value="1000" oninput="updateCalculations()">
+    </div>
+    <p style="text-align:right; font-weight:bold; color:#d35400; font-size: 0.9rem; margin-top: 10px;">Total Monthly Need: <span id="totalDignity">₱18,000</span></p>
+
+    <!-- STEP 4 -->
+    <h2>STEP 4: MY HIDDEN SEEDS</h2>
+    <div class="input-group">
+        <label>☕ Meryenda/Coffee/Eating out:</label>
+        <input type="number" id="hidden1" value="500" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>🚲 Convenience (Lakad vs Trike):</label>
+        <input type="number" id="hidden2" value="500" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>📲 Data/Promo/Subscriptions:</label>
+        <input type="number" id="hidden3" value="300" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>🛒 "Add to Cart" self-control:</label>
+        <input type="number" id="hidden4" value="500" oninput="updateCalculations()">
+    </div>
+    <div class="input-group">
+        <label>🎁 Unexpected love gifts:</label>
+        <input type="number" id="hidden5" value="200" oninput="updateCalculations()">
+    </div>
+    <p style="text-align:right; font-weight:bold; color:var(--primary-green); font-size: 0.9rem; margin-top: 10px;">Hidden Seeds Discovered: <span id="totalHidden">₱2,000</span></p>
+
+    <!-- FINAL SUMMARY -->
+    <div class="summary-footer">
+        <h3>ESTIMATED HARVEST AFTER <span id="summaryYears">20</span> YEARS</h3>
+        <span class="final-amount" id="finalHarvest">₱1,233,101</span>
+        <div style="font-size: 0.8rem; margin-top: 5px; opacity: 0.9;">Kombinasyon ng Allowance + Hidden Seeds</div>
+    </div>
+    
+    <div style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #7f8c8d;">
+        Monthly Seed: <span id="totalMonthlySeedText" style="font-weight: bold;">₱3,000</span> 
+        (Daily: <span id="totalDailySeedText">₱100.00</span>)
+    </div>
+</div>
 
 <script>
-    const canvas = document.getElementById('calcCanvas');
-    const ctx = canvas.getContext('2d');
+    function updateCalculations() {
+        // Step 1 Inputs
+        const income = parseFloat(document.getElementById('income').value) || 0;
+        const years = parseInt(document.getElementById('years').value) || 0;
+        const seedPct = parseFloat(document.getElementById('seedPct').value) || 0;
 
-    // --- State Management (Based on CSV values) ---
-    const state = {
-        income: 20000,
-        years: 20,
-        seedPct: 0.05,
-        // Step 3: Dignity Fund Needs
-        food: 9000,
-        utilities: 2000,
-        health: 5000,
-        travel: 1000,
-        ministry: 1000,
-        // Step 4: Hidden Seeds
-        coffee: 500,
-        trike: 500,
-        data: 300,
-        shopping: 500,
-        gifts: 200
-    };
+        // Step 3 Inputs
+        const food = parseFloat(document.getElementById('food').value) || 0;
+        const utilities = parseFloat(document.getElementById('utilities').value) || 0;
+        const health = parseFloat(document.getElementById('health').value) || 0;
+        const travel = parseFloat(document.getElementById('travel').value) || 0;
+        const ministry = parseFloat(document.getElementById('ministry').value) || 0;
 
-    const controls = [];
+        // Step 4 Inputs
+        const h1 = parseFloat(document.getElementById('hidden1').value) || 0;
+        const h2 = parseFloat(document.getElementById('hidden2').value) || 0;
+        const h3 = parseFloat(document.getElementById('hidden3').value) || 0;
+        const h4 = parseFloat(document.getElementById('hidden4').value) || 0;
+        const h5 = parseFloat(document.getElementById('hidden5').value) || 0;
 
-    function addControl(id, x, y, label, valueKey, step, isPercent = false) {
-        controls.push({ id, x, y, label, valueKey, step, isPercent });
-    }
-
-    // Step 1 Controls
-    addControl('inc', 320, 140, 'Income', 'income', 1000);
-    addControl('yrs', 320, 180, 'Years', 'years', 1);
-    addControl('pct', 320, 220, 'Seed %', 'seedPct', 0.01, true);
-
-    // Step 3 Controls
-    addControl('food', 320, 400, 'Food/Util', 'food', 500);
-    addControl('health', 320, 430, 'Health+', 'health', 500);
-
-    // Step 4 Controls
-    addControl('coffee', 320, 565, 'Meryenda', 'coffee', 100);
-    addControl('shopping', 320, 595, 'Cart/Misc', 'shopping', 100);
-
-    function calculate() {
-        const monthlySeedFromIncome = state.income * state.seedPct;
-        const totalHiddenSeeds = state.coffee + state.trike + state.data + state.shopping + state.gifts;
-        const totalMonthlySeed = monthlySeedFromIncome + totalHiddenSeeds;
+        // --- Calculations Logic ---
+        const monthlySeedIncome = income * seedPct;
+        const dailySeed = monthlySeedIncome / 30;
         
-        const annualRate = 0.05; // Conservative 5% growth
-        const r = annualRate / 12; 
-        const n = state.years * 12;
+        const totalHidden = h1 + h2 + h3 + h4 + h5;
+        const totalMonthlySeed = monthlySeedIncome + totalHidden;
+        const totalDailySeedTotal = totalMonthlySeed / 30;
         
-        // Future Value of an Annuity Formula: PMT * [((1 + r)^n - 1) / r]
-        let harvestValue = 0;
-        if (totalMonthlySeed > 0) {
-            harvestValue = totalMonthlySeed * ((Math.pow(1 + r, n) - 1) / r);
+        const totalDignity = food + utilities + health + travel + ministry;
+
+        const annualRate = 0.05; // 5% growth
+        const r = annualRate / 12;
+        const n = years * 12;
+        
+        // Harvest from Step 2 (Allowance Seed only)
+        let step2Harvest = 0;
+        if (monthlySeedIncome > 0 && n > 0) {
+            step2Harvest = monthlySeedIncome * ((Math.pow(1 + r, n) - 1) / r);
         }
-        
-        const totalDignityNeed = state.food + state.utilities + state.health + state.travel + state.ministry;
-        
-        return {
-            monthlySeedFromIncome,
-            totalHiddenSeeds,
-            totalMonthlySeed,
-            harvestValue,
-            totalDignityNeed
-        };
-    }
 
-    function draw() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const results = calculate();
-
-        // --- STEP 1: REALITY ---
-        ctx.fillStyle = "#27ae60";
-        ctx.font = "bold 18px Arial";
-        ctx.textAlign = "left";
-        ctx.fillText("STEP 1: MY CURRENT REALITY", 20, 40);
-
-        ctx.fillStyle = "#2c3e50";
-        ctx.font = "14px Arial";
-        drawRow("Monthly Allowance/Income:", "₱" + state.income.toLocaleString(), 80);
-        drawRow("Target Years to Harvest:", state.years + " years", 120);
-        drawRow("Seed Percentage:", (Math.round(state.seedPct * 100)) + "%", 160);
-
-        // --- STEP 2: HARVEST GOAL ---
-        ctx.fillStyle = "#27ae60";
-        ctx.font = "bold 18px Arial";
-        ctx.fillText("STEP 2: MY HARVEST GOAL", 20, 230);
-        
-        ctx.fillStyle = "#f8f9fa";
-        ctx.beginPath();
-        ctx.roundRect(20, 245, 410, 85, 10);
-        ctx.fill();
-        
-        ctx.fillStyle = "#2c3e50";
-        ctx.font = "14px Arial";
-        ctx.fillText("Monthly Seed (from Income):", 40, 275);
-        ctx.textAlign = "right";
-        ctx.font = "bold 16px Arial";
-        ctx.fillText("₱" + results.monthlySeedFromIncome.toLocaleString(), 400, 275);
-        
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#e67e22";
-        ctx.font = "bold 15px Arial";
-        ctx.fillText("ESTIMATED HARVEST (5% Growth):", 40, 305);
-        ctx.textAlign = "right";
-        ctx.font = "bold 20px Arial";
-        ctx.fillText("₱" + Math.round(results.harvestValue).toLocaleString(), 400, 305);
-
-        // --- STEP 3: DIGNITY FUND ---
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#27ae60";
-        ctx.font = "bold 18px Arial";
-        ctx.fillText("STEP 3: MY DIGNITY FUND CHECKLIST", 20, 365);
-        
-        ctx.fillStyle = "#2c3e50";
-        ctx.font = "13px Arial";
-        drawRow("🍲 Food & Utilities:", "₱" + (state.food + state.utilities).toLocaleString(), 400);
-        drawRow("💊 Health & Ministry:", "₱" + (state.health + state.travel + state.ministry).toLocaleString(), 430);
-        
-        ctx.fillStyle = "#d35400";
-        ctx.font = "bold 14px Arial";
-        ctx.fillText("Future Monthly Need:", 40, 465);
-        ctx.textAlign = "right";
-        ctx.fillText("₱" + results.totalDignityNeed.toLocaleString(), 400, 465);
-
-        // --- STEP 4: HIDDEN SEEDS ---
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#27ae60";
-        ctx.font = "bold 18px Arial";
-        ctx.fillText("STEP 4: MY HIDDEN SEEDS", 20, 525);
-        ctx.fillStyle = "#2c3e50";
-        ctx.font = "13px Arial";
-        drawRow("☕ Meryenda/Coffee/Trike:", "₱" + (state.coffee + state.trike).toLocaleString(), 565);
-        drawRow("🛒 Data/Shopping/Gifts:", "₱" + (state.shopping + state.data + state.gifts).toLocaleString(), 595);
-        
-        ctx.fillStyle = "#27ae60";
-        ctx.font = "bold 14px Arial";
-        ctx.fillText("Hidden Seeds Discovered:", 40, 630);
-        ctx.textAlign = "right";
-        ctx.fillText("₱" + results.totalHiddenSeeds.toLocaleString(), 400, 630);
-
-        // --- FINAL SUMMARY ---
-        ctx.fillStyle = "#27ae60";
-        ctx.beginPath();
-        ctx.roundRect(20, 675, 410, 85, 15);
-        ctx.fill();
-
-        ctx.fillStyle = "white";
-        ctx.textAlign = "center";
-        ctx.font = "bold 13px Arial";
-        ctx.fillText("TOTAL MONTHLY SEED: ₱" + results.totalMonthlySeed.toLocaleString(), 225, 700);
-        ctx.font = "bold 24px Arial";
-        ctx.fillText("TOTAL HARVEST: ₱" + Math.round(results.harvestValue).toLocaleString(), 225, 735);
-
-        drawButtons();
-    }
-
-    function drawRow(label, value, y) {
-        ctx.textAlign = "left";
-        ctx.fillStyle = "#34495e";
-        ctx.fillText(label, 40, y);
-        ctx.textAlign = "right";
-        ctx.fillText(value, 300, y);
-    }
-
-    function drawButtons() {
-        ctx.textAlign = "center";
-        ctx.font = "bold 14px Arial";
-        controls.forEach(ctrl => {
-            // Minus Circle
-            ctx.fillStyle = "#e74c3c";
-            ctx.beginPath();
-            ctx.arc(ctrl.x + 20, ctrl.y - 5, 12, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.fillText("-", ctrl.x + 20, ctrl.y);
-
-            // Plus Circle
-            ctx.fillStyle = "#2ecc71";
-            ctx.beginPath();
-            ctx.arc(ctrl.x + 50, ctrl.y - 5, 12, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = "white";
-            ctx.fillText("+", ctrl.x + 50, ctrl.y);
-        });
-    }
-
-    canvas.addEventListener('click', (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const mx = e.clientX - rect.left;
-        const my = e.clientY - rect.top;
-
-        controls.forEach(ctrl => {
-            // Minus Button Detection
-            if (dist(mx, my, ctrl.x + 20, ctrl.y - 5) < 15) {
-                state[ctrl.valueKey] = Math.max(0, state[ctrl.valueKey] - ctrl.step);
-                draw();
-            }
-            // Plus Button Detection
-            if (dist(mx, my, ctrl.x + 50, ctrl.y - 5) < 15) {
-                state[ctrl.valueKey] += ctrl.step;
-                if(ctrl.valueKey === 'seedPct') state[ctrl.valueKey] = Math.min(1, state[ctrl.valueKey]);
-                draw();
-            }
-        });
-    });
-
-    function dist(x1, y1, x2, y2) {
-        return Math.sqrt((x1 - x2)**2 + (y1 - y2)**2);
-    }
-
-    // Standard Polyfill for roundRect
-    if (!CanvasRenderingContext2D.prototype.roundRect) {
-        CanvasRenderingContext2D.prototype.roundRect = function (x, y, w, h, r) {
-            if (w < 2 * r) r = w / 2;
-            if (h < 2 * r) r = h / 2;
-            this.moveTo(x + r, y);
-            this.arcTo(x + w, y, x + w, y + h, r);
-            this.arcTo(x + w, y + h, x, y + h, r);
-            this.arcTo(x, y + h, x, y, r);
-            this.arcTo(x, y, x + w, y, r);
-            return this;
+        // Total Harvest (Allowance + Hidden Seeds)
+        let totalHarvest = 0;
+        if (totalMonthlySeed > 0 && n > 0) {
+            totalHarvest = totalMonthlySeed * ((Math.pow(1 + r, n) - 1) / r);
         }
+
+        // --- Updating UI ---
+        document.getElementById('monthlySeedIncome').innerText = "₱" + monthlySeedIncome.toLocaleString(undefined, {maximumFractionDigits: 0});
+        document.getElementById('dailySeed').innerText = "₱" + dailySeed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        document.getElementById('step2Harvest').innerText = "₱" + Math.round(step2Harvest).toLocaleString();
+
+        document.getElementById('totalDignity').innerText = "₱" + totalDignity.toLocaleString();
+        document.getElementById('totalHidden').innerText = "₱" + totalHidden.toLocaleString();
+        
+        document.getElementById('totalMonthlySeedText').innerText = "₱" + totalMonthlySeed.toLocaleString();
+        document.getElementById('totalDailySeedText').innerText = "₱" + totalDailySeedTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        
+        document.getElementById('summaryYears').innerText = years;
+        document.getElementById('finalHarvest').innerText = "₱" + Math.round(totalHarvest).toLocaleString();
     }
 
-    window.onload = draw;
+    window.onload = updateCalculations;
 </script>
+
 </body>
 </html>
