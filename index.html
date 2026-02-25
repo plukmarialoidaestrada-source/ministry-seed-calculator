@@ -28,9 +28,22 @@
             max-width: 600px;
             width: 100%;
         }
+        .header-branding {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            max-width: 150px; /* Sakto lang na size */
+            height: auto;
+            margin-bottom: 10px;
+        }
         h1, h2 {
             color: var(--primary-green);
             margin-top: 0;
+        }
+        h1 {
+            font-size: 1.6rem;
+            margin-bottom: 5px;
         }
         h2 {
             font-size: 1.1rem;
@@ -72,13 +85,46 @@
         .summary-footer {
             background: var(--primary-green);
             color: white;
-            padding: 20px;
+            padding: 25px;
             border-radius: 10px;
             text-align: center;
             margin-top: 30px;
         }
         .summary-footer h3 { margin: 0; font-size: 1.1rem; }
         .summary-footer .final-amount { font-size: 2.2rem; display: block; margin-top: 5px; font-weight: bold; }
+        
+        /* CTA Section Styles */
+        .cta-section {
+            margin-top: 40px;
+            padding: 25px;
+            background: #fdfdfd;
+            border: 2px dashed #27ae60;
+            border-radius: 15px;
+            text-align: center;
+        }
+        .cta-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #34495e;
+            margin-bottom: 20px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-green);
+            color: white;
+            text-decoration: none;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
+        }
+        .cta-button:hover {
+            background-color: #219150;
+            transform: translateY(-2px);
+        }
+
         .quote { font-style: italic; font-size: 0.85rem; color: #7f8c8d; text-align: center; margin-bottom: 20px; }
         .small-note { font-size: 0.7rem; color: #7f8c8d; line-height: 1.3; margin-top: 10px; }
         .highlight-val { font-weight: bold; color: var(--text-dark); }
@@ -87,8 +133,10 @@
 <body>
 
 <div class="container">
-    <div style="text-align:center;">
-        <h1>🌱 Ministry Seed Calculator</h1>
+    <div class="header-branding">
+        <!-- Palitan ang 'src' ng iyong actual logo URL kung meron na -->
+        <img src="https://via.placeholder.com/150x50?text=SOLVE+Financial" alt="SOLVE Financial Logo" class="logo" onerror="this.style.display='none'">
+        <h1>🌱 Ministry Seed Calculator by SOLVE Financial</h1>
         <p class="quote">"Ang maliit na seed ngayon, maganDANG harvest bukas."</p>
     </div>
 
@@ -115,7 +163,7 @@
         </select>
     </div>
 
-    <!-- STEP 2: HARVEST GOAL (Based on Excel Step 2) -->
+    <!-- STEP 2: HARVEST GOAL -->
     <h2>STEP 2: MY HARVEST GOAL (RESULT)</h2>
     <div class="harvest-box">
         <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
@@ -194,66 +242,66 @@
         Monthly Seed: <span id="totalMonthlySeedText" style="font-weight: bold;">₱3,000</span> 
         (Daily: <span id="totalDailySeedText">₱100.00</span>)
     </div>
+
+    <!-- STEP 5: CALL TO ACTION -->
+    <div class="cta-section">
+        <p class="cta-text">
+            🌱 <strong>"Nakita mo na ang iyong potential harvest? Nakaka-excite, 'di ba!"</strong><br><br>
+            Gusto kitang tulungan na gawing solid action plan ang iyong mga numbers. Ang tanong ngayon: <em>'Paano ko ito sisimulan at saan ko itatanim ang mga seeds nang hindi nasasakal ang budget ko sa ministry?'</em><br><br>
+            I’m inviting you to a <strong>FREE 15-Minute Seed Planting Call</strong>. Sabay nating hihimayin ang iyong plan para maging HanDANG-handa ka na sa anumang season ng iyong ministry.
+        </p>
+        <a href="https://links.advisoraccelerator.co/widget/bookings/dang-estrada-personal-calendar-bibc10s_4" target="_blank" class="cta-button">
+            YES! Let's have a 15-Minute Seed Planting Call
+        </a>
+    </div>
 </div>
 
 <script>
     function updateCalculations() {
-        // Step 1 Inputs
         const income = parseFloat(document.getElementById('income').value) || 0;
         const years = parseInt(document.getElementById('years').value) || 0;
         const seedPct = parseFloat(document.getElementById('seedPct').value) || 0;
 
-        // Step 3 Inputs
         const food = parseFloat(document.getElementById('food').value) || 0;
         const utilities = parseFloat(document.getElementById('utilities').value) || 0;
         const health = parseFloat(document.getElementById('health').value) || 0;
         const travel = parseFloat(document.getElementById('travel').value) || 0;
         const ministry = parseFloat(document.getElementById('ministry').value) || 0;
 
-        // Step 4 Inputs
         const h1 = parseFloat(document.getElementById('hidden1').value) || 0;
         const h2 = parseFloat(document.getElementById('hidden2').value) || 0;
         const h3 = parseFloat(document.getElementById('hidden3').value) || 0;
         const h4 = parseFloat(document.getElementById('hidden4').value) || 0;
         const h5 = parseFloat(document.getElementById('hidden5').value) || 0;
 
-        // --- Calculations Logic ---
         const monthlySeedIncome = income * seedPct;
         const dailySeed = monthlySeedIncome / 30;
-        
         const totalHidden = h1 + h2 + h3 + h4 + h5;
         const totalMonthlySeed = monthlySeedIncome + totalHidden;
         const totalDailySeedTotal = totalMonthlySeed / 30;
-        
         const totalDignity = food + utilities + health + travel + ministry;
 
-        const annualRate = 0.05; // 5% growth
+        const annualRate = 0.05; 
         const r = annualRate / 12;
         const n = years * 12;
         
-        // Harvest from Step 2 (Allowance Seed only)
         let step2Harvest = 0;
         if (monthlySeedIncome > 0 && n > 0) {
             step2Harvest = monthlySeedIncome * ((Math.pow(1 + r, n) - 1) / r);
         }
 
-        // Total Harvest (Allowance + Hidden Seeds)
         let totalHarvest = 0;
         if (totalMonthlySeed > 0 && n > 0) {
             totalHarvest = totalMonthlySeed * ((Math.pow(1 + r, n) - 1) / r);
         }
 
-        // --- Updating UI ---
         document.getElementById('monthlySeedIncome').innerText = "₱" + monthlySeedIncome.toLocaleString(undefined, {maximumFractionDigits: 0});
         document.getElementById('dailySeed').innerText = "₱" + dailySeed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
         document.getElementById('step2Harvest').innerText = "₱" + Math.round(step2Harvest).toLocaleString();
-
         document.getElementById('totalDignity').innerText = "₱" + totalDignity.toLocaleString();
         document.getElementById('totalHidden').innerText = "₱" + totalHidden.toLocaleString();
-        
         document.getElementById('totalMonthlySeedText').innerText = "₱" + totalMonthlySeed.toLocaleString();
         document.getElementById('totalDailySeedText').innerText = "₱" + totalDailySeedTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        
         document.getElementById('summaryYears').innerText = years;
         document.getElementById('finalHarvest').innerText = "₱" + Math.round(totalHarvest).toLocaleString();
     }
