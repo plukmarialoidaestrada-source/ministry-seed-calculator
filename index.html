@@ -3,311 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ministry Seed Calculator</title>
+    <title>MY SEED CALCULATOR</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary-green: #27ae60;
-            --bg-color: #f4f7f6;
-            --text-dark: #2c3e50;
-            --accent-orange: #e67e22;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-        }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        .header-branding {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .logo {
-            max-width: 150px; /* Sakto lang na size */
-            height: auto;
-            margin-bottom: 10px;
-        }
-        h1, h2 {
-            color: var(--primary-green);
-            margin-top: 0;
-        }
-        h1 {
-            font-size: 1.6rem;
-            margin-bottom: 5px;
-        }
-        h2 {
-            font-size: 1.1rem;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 5px;
-            margin-top: 25px;
-        }
-        .input-group {
-            display: grid;
-            grid-template-columns: 1fr 140px;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        label { font-size: 0.85rem; font-weight: 500; }
-        input, select {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            text-align: right;
-            font-family: inherit;
-            background: white;
-            font-size: 0.9rem;
-        }
-        .result-box {
-            background: #f9fbf9;
-            border-left: 5px solid var(--primary-green);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        .harvest-box {
-            background: #fffaf0;
-            border-left: 5px solid var(--accent-orange);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 5px;
-        }
-        .summary-footer {
-            background: var(--primary-green);
-            color: white;
-            padding: 25px;
-            border-radius: 10px;
-            text-align: center;
-            margin-top: 30px;
-        }
-        .summary-footer h3 { margin: 0; font-size: 1.1rem; }
-        .summary-footer .final-amount { font-size: 2.2rem; display: block; margin-top: 5px; font-weight: bold; }
-        
-        /* CTA Section Styles */
-        .cta-section {
-            margin-top: 40px;
-            padding: 25px;
-            background: #fdfdfd;
-            border: 2px dashed #27ae60;
-            border-radius: 15px;
-            text-align: center;
-        }
-        .cta-text {
-            font-size: 0.95rem;
-            line-height: 1.6;
-            color: #34495e;
-            margin-bottom: 20px;
-        }
-        .cta-button {
-            display: inline-block;
-            background-color: var(--primary-green);
-            color: white;
-            text-decoration: none;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1rem;
-            transition: transform 0.2s, background-color 0.2s;
-            box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3);
-        }
-        .cta-button:hover {
-            background-color: #219150;
-            transform: translateY(-2px);
-        }
-
-        .quote { font-style: italic; font-size: 0.85rem; color: #7f8c8d; text-align: center; margin-bottom: 20px; }
-        .small-note { font-size: 0.7rem; color: #7f8c8d; line-height: 1.3; margin-top: 10px; }
-        .highlight-val { font-weight: bold; color: var(--text-dark); }
+        body { font-family: 'Inter', sans-serif; background-color: #f9fafb; }
+        .accent-green { color: #16a34a; }
+        .bg-green-custom { background-color: #064e3b; } 
+        .accent-orange { color: #ea580c; }
+        .bg-orange-custom { background-color: #ea580c; }
+        .bg-gold { background-color: #D4AF37; } /* Premium Gold Color */
+        .border-gold { border-color: #D4AF37; }
+        .card { background: white; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); padding: 1.5rem; margin-bottom: 1.5rem; }
+        input[type="text"], input[type="number"] { transition: all 0.2s; }
     </style>
 </head>
-<body>
+<body class="p-4 md:p-8">
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800">✨ MY SEED CALCULATOR</h1>
+            <p class="text-lg text-gray-600 italic">"Ang maliit na seed ngayon, maganDANG harvest bukas." 🌿</p>
+        </header>
 
-<div class="container">
-    <div class="header-branding">
-        <!-- Palitan ang 'src' ng iyong actual logo URL kung meron na -->
-        <img src="https://via.placeholder.com/150x50?text=SOLVE+Financial" alt="SOLVE Financial Logo" class="logo" onerror="this.style.display='none'">
-        <h1>🌱 Ministry Seed Calculator by SOLVE Financial</h1>
-        <p class="quote">"Ang maliit na seed ngayon, maganDANG harvest bukas."</p>
-    </div>
-
-    <!-- STEP 1 -->
-    <h2>STEP 1: MY CURRENT REALITY & POSSIBILITY</h2>
-    <div class="input-group">
-        <label>Monthly Allowance / Income (₱):</label>
-        <input type="number" id="income" value="20000" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>Target Years to Harvest:</label>
-        <select id="years" onchange="updateCalculations()">
-            <option value="5">5 years</option>
-            <option value="10">10 years</option>
-            <option value="15">15 years</option>
-            <option value="20" selected>20 years</option>
-        </select>
-    </div>
-    <div class="input-group">
-        <label>Seed Percentage:</label>
-        <select id="seedPct" onchange="updateCalculations()">
-            <option value="0.05" selected>5%</option>
-            <option value="0.10">10%</option>
-        </select>
-    </div>
-
-    <!-- STEP 2: HARVEST GOAL -->
-    <h2>STEP 2: MY HARVEST GOAL (RESULT)</h2>
-    <div class="harvest-box">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 0.9rem;">
-            <span>Monthly Seed from Income:</span>
-            <span id="monthlySeedIncome" class="highlight-val">₱1,000</span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 0.85rem; color: #666;">
-            <span>Your Daily Seed:</span>
-            <span id="dailySeed" class="highlight-val">₱33.33</span>
-        </div>
-        <div style="border-top: 1px dashed #ddd; padding-top: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-weight: bold; color: var(--accent-orange); font-size: 0.9rem;">ESTIMATED HARVEST (5% growth*):</span>
-                <span id="step2Harvest" style="font-weight: bold; color: var(--accent-orange); font-size: 1.1rem;">₱411,034</span>
+        <!-- Step 1: My Profile & Income -->
+        <div class="card border-l-4 border-gold">
+            <h2 class="text-xl font-bold mb-4 flex items-center">
+                <span class="bg-gold text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm shadow-sm">1</span>
+                💵 MY PROFILE & INCOME
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Monthly Income / Allowance (₱)</label>
+                    <input type="text" id="monthlyIncome" value="20,000" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none" oninput="formatInput(this); calculate()">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-sm font-medium text-gray-700">Current Age</label>
+                    <input type="number" id="currentAge" value="30" min="0" max="100" class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500 outline-none" oninput="calculate()">
+                </div>
             </div>
-            <p class="small-note">*Note: Ginamit natin ang 5% bilang conservative estimate. Ito ang power ng consistency!</p>
         </div>
+
+        <!-- Step 2: My Savings Plan -->
+        <div class="card border-l-4 border-gold">
+            <h2 class="text-xl font-bold mb-2 flex items-center">
+                <span class="bg-gold text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm shadow-sm">2</span>
+                🌱 MY SAVINGS PLAN
+            </h2>
+            <p class="text-sm text-gray-500 mb-6 italic">Maliit na halaga ngayon, malaking harvest sa future. ✨</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">💰 Bank Savings (Ipon)</label>
+                    <select id="savingsRate" class="w-full p-3 border rounded-lg outline-none" onchange="calculate()">
+                        <option value="0.05" selected>5%</option>
+                        <option value="0.10">10%</option>
+                        <option value="0.15">15%</option>
+                        <option value="0.20">20%</option>
+                    </select>
+                    <p id="savingsPreview" class="text-xs text-orange-600 font-semibold mt-2">₱1,000/month or ₱33/day savings</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">🛡️ Lifeline Fund (Protection)</label>
+                    <select id="lifelineRate" class="w-full p-3 border rounded-lg outline-none" onchange="calculate()">
+                        <option value="0.05" selected>5%</option>
+                        <option value="0.10">10%</option>
+                        <option value="0.15">15%</option>
+                        <option value="0.20">20%</option>
+                    </select>
+                    <p id="lifelinePreview" class="text-xs text-green-700 font-semibold mt-2">₱1,000/month or ₱33/day seed</p>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">📅 How long will I save?</label>
+                    <div class="flex justify-between gap-2">
+                        <button onclick="setYears(5)" class="year-btn flex-1 py-2 rounded-lg border bg-white hover:bg-gray-50 transition-colors" data-years="5">5 Yrs</button>
+                        <button onclick="setYears(10)" class="year-btn flex-1 py-2 rounded-lg border bg-white hover:bg-gray-50 transition-colors" data-years="10">10 Yrs</button>
+                        <button onclick="setYears(15)" class="year-btn flex-1 py-2 rounded-lg border bg-white border-orange-600 ring-1 ring-orange-600" data-years="15">15 Yrs</button>
+                        <button onclick="setYears(20)" class="year-btn flex-1 py-2 rounded-lg border bg-white hover:bg-gray-50 transition-colors" data-years="20">20 Yrs</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Visual Result Area -->
+        <div class="card overflow-hidden border-l-4 border-gold">
+            <h3 class="text-center font-bold text-lg mb-4">📈 Potential Harvest Visualization</h3>
+            <div class="mb-6 h-64">
+                <canvas id="harvestChart"></canvas>
+            </div>
+
+            <!-- Side-by-Side Savings Summary Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="bg-orange-50 p-4 rounded-xl border border-orange-100 text-center">
+                    <p class="text-gray-700 font-semibold text-sm">💰 Estimated Bank Savings after <span id="summaryYears" class="text-orange-600">15</span> years</p>
+                    <p class="text-2xl font-bold text-orange-600 my-1" id="totalBankSavings">₱0</p>
+                    <p class="text-[10px] text-gray-500 italic">Ipon na lumalago habang tumatagal.</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-xl border border-green-100 text-center">
+                    <p class="text-gray-700 font-semibold text-sm">🛡️ Lifeline Fund Protection</p>
+                    <p class="text-2xl font-bold text-green-700 my-1" id="totalLifelineAmount">₱0</p>
+                    <p class="text-[10px] text-gray-500 italic">Automatic ang coverage mula unang bayad ng premium.</p>
+                </div>
+            </div>
+            
+            <h3 class="text-center font-bold text-lg mb-4">💎 Bakit mahalaga ang Lifeline Fund?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="p-4 border-l-4 border-red-400 bg-red-50 rounded-r-lg">
+                    <p class="text-xs font-bold text-red-600 uppercase">🏥 Critical Illness</p>
+                    <p class="text-xl font-bold" id="ciAmount">₱0</p>
+                    <p class="text-[10px] text-gray-600 mt-1">Pondo para sa gamutan ng Cancer, Heart Attack, o Stroke.</p>
+                </div>
+                <div class="p-4 border-l-4 border-blue-400 bg-blue-50 rounded-r-lg">
+                    <p class="text-xs font-bold text-blue-600 uppercase">🚑 Accident / Disability</p>
+                    <p class="text-xl font-bold" id="accAmount">₱0</p>
+                    <p class="text-[10px] text-gray-600 mt-1">Dobleng tulong pinansyal kung sakaling ma-aksidente.</p>
+                </div>
+                <div class="p-4 border-l-4 border-gray-400 bg-gray-100 rounded-r-lg">
+                    <p class="text-xs font-bold text-gray-600 uppercase">🕊️ Death Benefit</p>
+                    <p class="text-xl font-bold text-gray-800" id="dbAmount">₱0</p>
+                    <p class="text-[10px] text-gray-600 mt-1">Instant Inheritance para sa pamilya. Hindi na hihintayin lumaki ang ipon.</p>
+                </div>
+            </div>
+
+            <!-- Important Notes moved here -->
+            <div class="bg-gray-50 p-4 rounded-xl border border-gold/30 text-[11px] text-gray-600 space-y-2">
+                <div class="flex gap-2">
+                    <span class="text-gold font-bold">•</span>
+                    <p>Ang <span class="font-semibold text-gray-800">Lifeline Fund protection</span> ay automatic ang coverage sa oras na ma-approve at magbayad ng unang premium.</p>
+                </div>
+                <div class="flex gap-2">
+                    <span class="text-gold font-bold">•</span>
+                    <p>Ang mga figures ay estimations lamang base sa standard multipliers - bank interest at insurance market.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Hidden Seeds -->
+        <div class="card border-l-4 border-gold bg-gray-50">
+            <h2 class="text-xl font-bold mb-2 flex items-center">
+                <span class="bg-gold text-white rounded-full w-8 h-8 flex items-center justify-center mr-2 text-sm shadow-sm">3</span>
+                🔍 MY HIDDEN "SEEDS"
+            </h2>
+            <p class="text-sm text-gray-500 mb-6 italic">Ito ang mga pwedeng tipirin para makapag-save. ✂️</p>
+            
+            <div class="space-y-4">
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-sm">☕ Meryenda/Coffee/Eating out</span>
+                    <input type="text" class="hidden-seed w-32 p-2 border rounded text-right" value="500" oninput="formatInput(this); calculateSeeds()">
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-sm">🚲 Convenience (Lakad vs Trike)</span>
+                    <input type="text" class="hidden-seed w-32 p-2 border rounded text-right" value="300" oninput="formatInput(this); calculateSeeds()">
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-sm">📲 Data/Promo/Subscriptions</span>
+                    <input type="text" class="hidden-seed w-32 p-2 border rounded text-right" value="1,000" oninput="formatInput(this); calculateSeeds()">
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-sm">🛒 "Add to Cart" self-control</span>
+                    <input type="text" class="hidden-seed w-32 p-2 border rounded text-right" value="2,500" oninput="formatInput(this); calculateSeeds()">
+                </div>
+                <div class="flex items-center justify-between gap-4">
+                    <span class="text-sm">🎁 Unexpected financial gifts</span>
+                    <input type="text" class="hidden-seed w-32 p-2 border rounded text-right" value="1,000" oninput="formatInput(this); calculateSeeds()">
+                </div>
+                <div class="pt-4 border-t flex items-center justify-between font-bold text-green-700">
+                    <span>✨ TOTAL HIDDEN SEEDS</span>
+                    <span id="totalSeeds" class="text-xl">₱5,300</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="text-center py-10 px-6 bg-green-50 rounded-2xl border-2 border-dashed border-green-200">
+            <div class="text-gray-700 mb-8 space-y-4 max-w-xl mx-auto">
+                <p class="text-xl font-medium italic">🌱 "Nakita mo na ang iyong potential harvest? Ang tanong ngayon: 'Paano ko ito sisimulan?'"</p>
+                <p>Gusto kitang tulungan na gawing solid action plan ang iyong mga numbers. 🤝</p>
+            </div>
+            <a href="https://links.advisoraccelerator.co/widget/bookings/dang-estrada-personal-calendar-bibc10s_4" 
+               target="_blank"
+               class="inline-block bg-[#064e3b] text-white font-bold py-4 px-10 rounded-full shadow-lg hover:bg-emerald-900 transition-all transform hover:scale-105 active:scale-95">
+                Yes! Let's have that 15-minute call. 📞
+            </a>
+        </div>
+
+        <!-- Footer Notes -->
+        <footer class="mt-8 text-[11px] text-gray-500 space-y-2 px-4 pb-12">
+            <div class="flex gap-2">
+                <span>*</span>
+                <p>Makakatulong ang ating 15-minute call para makagawa tayo ng actual computation na saktong-sakto sa iyong edad, kalusugan, at insurance plan.</p>
+            </div>
+        </footer>
     </div>
 
-    <!-- STEP 3 -->
-    <h2>STEP 3: MY DIGNITY FUND CHECKLIST</h2>
-    <div class="input-group">
-        <label>🍲 Pagkain kada buwan:</label>
-        <input type="number" id="food" value="9000" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>💡 Tubig, Kuryente & Connectivity:</label>
-        <input type="number" id="utilities" value="2000" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>💊 Maintenance & Health:</label>
-        <input type="number" id="health" value="5000" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>🚗 Pamasahe o Gasolina:</label>
-        <input type="number" id="travel" value="1000" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>🎁 Ministry Support:</label>
-        <input type="number" id="ministry" value="1000" oninput="updateCalculations()">
-    </div>
-    <p style="text-align:right; font-weight:bold; color:#d35400; font-size: 0.9rem; margin-top: 10px;">Total Monthly Need: <span id="totalDignity">₱18,000</span></p>
+    <script>
+        let selectedYears = 15;
+        let chart = null;
 
-    <!-- STEP 4 -->
-    <h2>STEP 4: MY HIDDEN SEEDS</h2>
-    <div class="input-group">
-        <label>☕ Meryenda/Coffee/Eating out:</label>
-        <input type="number" id="hidden1" value="500" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>🚲 Convenience (Lakad vs Trike):</label>
-        <input type="number" id="hidden2" value="500" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>📲 Data/Promo/Subscriptions:</label>
-        <input type="number" id="hidden3" value="300" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>🛒 "Add to Cart" self-control:</label>
-        <input type="number" id="hidden4" value="500" oninput="updateCalculations()">
-    </div>
-    <div class="input-group">
-        <label>🎁 Unexpected love gifts:</label>
-        <input type="number" id="hidden5" value="200" oninput="updateCalculations()">
-    </div>
-    <p style="text-align:right; font-weight:bold; color:var(--primary-green); font-size: 0.9rem; margin-top: 10px;">Hidden Seeds Discovered: <span id="totalHidden">₱2,000</span></p>
-
-    <!-- FINAL SUMMARY -->
-    <div class="summary-footer">
-        <h3>ESTIMATED HARVEST AFTER <span id="summaryYears">20</span> YEARS</h3>
-        <span class="final-amount" id="finalHarvest">₱1,233,101</span>
-        <div style="font-size: 0.8rem; margin-top: 5px; opacity: 0.9;">Kombinasyon ng Allowance + Hidden Seeds</div>
-    </div>
-    
-    <div style="text-align: center; margin-top: 15px; font-size: 0.8rem; color: #7f8c8d;">
-        Monthly Seed: <span id="totalMonthlySeedText" style="font-weight: bold;">₱3,000</span> 
-        (Daily: <span id="totalDailySeedText">₱100.00</span>)
-    </div>
-
-    <!-- STEP 5: CALL TO ACTION -->
-    <div class="cta-section">
-        <p class="cta-text">
-            🌱 <strong>"Nakita mo na ang iyong potential harvest? Nakaka-excite, 'di ba!"</strong><br><br>
-            Gusto kitang tulungan na gawing solid action plan ang iyong mga numbers. Ang tanong ngayon: <em>'Paano ko ito sisimulan at saan ko itatanim ang mga seeds nang hindi nasasakal ang budget ko sa ministry?'</em><br><br>
-            I’m inviting you to a <strong>FREE 15-Minute Seed Planting Call</strong>. Sabay nating hihimayin ang iyong plan para maging HanDANG-handa ka na sa anumang season ng iyong ministry.
-        </p>
-        <a href="https://links.advisoraccelerator.co/widget/bookings/dang-estrada-personal-calendar-bibc10s_4" target="_blank" class="cta-button">
-            YES! Let's have a 15-Minute Seed Planting Call
-        </a>
-    </div>
-</div>
-
-<script>
-    function updateCalculations() {
-        const income = parseFloat(document.getElementById('income').value) || 0;
-        const years = parseInt(document.getElementById('years').value) || 0;
-        const seedPct = parseFloat(document.getElementById('seedPct').value) || 0;
-
-        const food = parseFloat(document.getElementById('food').value) || 0;
-        const utilities = parseFloat(document.getElementById('utilities').value) || 0;
-        const health = parseFloat(document.getElementById('health').value) || 0;
-        const travel = parseFloat(document.getElementById('travel').value) || 0;
-        const ministry = parseFloat(document.getElementById('ministry').value) || 0;
-
-        const h1 = parseFloat(document.getElementById('hidden1').value) || 0;
-        const h2 = parseFloat(document.getElementById('hidden2').value) || 0;
-        const h3 = parseFloat(document.getElementById('hidden3').value) || 0;
-        const h4 = parseFloat(document.getElementById('hidden4').value) || 0;
-        const h5 = parseFloat(document.getElementById('hidden5').value) || 0;
-
-        const monthlySeedIncome = income * seedPct;
-        const dailySeed = monthlySeedIncome / 30;
-        const totalHidden = h1 + h2 + h3 + h4 + h5;
-        const totalMonthlySeed = monthlySeedIncome + totalHidden;
-        const totalDailySeedTotal = totalMonthlySeed / 30;
-        const totalDignity = food + utilities + health + travel + ministry;
-
-        const annualRate = 0.05; 
-        const r = annualRate / 12;
-        const n = years * 12;
-        
-        let step2Harvest = 0;
-        if (monthlySeedIncome > 0 && n > 0) {
-            step2Harvest = monthlySeedIncome * ((Math.pow(1 + r, n) - 1) / r);
+        function formatInput(input) {
+            let val = input.value.replace(/,/g, '');
+            if (!isNaN(val) && val !== "") {
+                input.value = parseFloat(val).toLocaleString();
+            }
         }
 
-        let totalHarvest = 0;
-        if (totalMonthlySeed > 0 && n > 0) {
-            totalHarvest = totalMonthlySeed * ((Math.pow(1 + r, n) - 1) / r);
+        function getVal(idOrElement) {
+            let el = typeof idOrElement === 'string' ? document.getElementById(idOrElement) : idOrElement;
+            return parseFloat(el.value.replace(/,/g, '')) || 0;
         }
 
-        document.getElementById('monthlySeedIncome').innerText = "₱" + monthlySeedIncome.toLocaleString(undefined, {maximumFractionDigits: 0});
-        document.getElementById('dailySeed').innerText = "₱" + dailySeed.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('step2Harvest').innerText = "₱" + Math.round(step2Harvest).toLocaleString();
-        document.getElementById('totalDignity').innerText = "₱" + totalDignity.toLocaleString();
-        document.getElementById('totalHidden').innerText = "₱" + totalHidden.toLocaleString();
-        document.getElementById('totalMonthlySeedText').innerText = "₱" + totalMonthlySeed.toLocaleString();
-        document.getElementById('totalDailySeedText').innerText = "₱" + totalDailySeedTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-        document.getElementById('summaryYears').innerText = years;
-        document.getElementById('finalHarvest').innerText = "₱" + Math.round(totalHarvest).toLocaleString();
-    }
+        function setYears(y) {
+            selectedYears = y;
+            document.querySelectorAll('.year-btn').forEach(btn => {
+                btn.classList.remove('border-orange-600', 'ring-1', 'ring-orange-600');
+                if(parseInt(btn.dataset.years) === y) {
+                    btn.classList.add('border-orange-600', 'ring-1', 'ring-orange-600');
+                }
+            });
+            document.getElementById('summaryYears').innerText = y;
+            calculate();
+        }
 
-    window.onload = updateCalculations;
-</script>
+        function calculateSeeds() {
+            const inputs = document.querySelectorAll('.hidden-seed');
+            let total = 0;
+            inputs.forEach(i => total += getVal(i));
+            document.getElementById('totalSeeds').innerText = '₱' + total.toLocaleString();
+        }
 
+        function calculate() {
+            const income = getVal('monthlyIncome');
+            const age = parseInt(document.getElementById('currentAge').value) || 0;
+            const savingsRate = parseFloat(document.getElementById('savingsRate').value);
+            const lifelineRate = parseFloat(document.getElementById('lifelineRate').value);
+            
+            const mSavings = income * savingsRate;
+            const mLifeline = income * lifelineRate;
+
+            // Update Previews
+            document.getElementById('savingsPreview').innerText = `₱${mSavings.toLocaleString()}/month or ₱${Math.round(mSavings/30).toLocaleString()}/day savings`;
+            document.getElementById('lifelinePreview').innerText = `₱${mLifeline.toLocaleString()}/month or ₱${Math.round(mLifeline/30).toLocaleString()}/day seed`;
+
+            // Visualization
+            const labels = [];
+            const savingsData = [];
+            const lifelineData = [];
+            const protectionMultiplier = 1500; 
+
+            for (let i = 0; i <= selectedYears; i++) {
+                const currentAgeLabel = age + i;
+                labels.push(`Yr ${i} (Age ${currentAgeLabel})`);
+                savingsData.push(mSavings * 12 * i);
+                lifelineData.push(income * protectionMultiplier / 100); 
+            }
+
+            // Summary Card
+            const finalBankSavings = mSavings * 12 * selectedYears;
+            document.getElementById('totalBankSavings').innerText = '₱' + finalBankSavings.toLocaleString();
+
+            const baseProtection = (income * protectionMultiplier / 100);
+            document.getElementById('totalLifelineAmount').innerText = '₱' + baseProtection.toLocaleString();
+
+            // Update Protection Cards
+            document.getElementById('ciAmount').innerText = '₱' + Math.round(baseProtection / 2).toLocaleString();
+            document.getElementById('accAmount').innerText = '₱' + baseProtection.toLocaleString();
+            document.getElementById('dbAmount').innerText = '₱' + baseProtection.toLocaleString();
+
+            updateChart(labels, savingsData, lifelineData);
+            calculateSeeds();
+        }
+
+        function updateChart(labels, savings, lifeline) {
+            const ctx = document.getElementById('harvestChart').getContext('2d');
+            if (chart) chart.destroy();
+
+            chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Bank Savings (Ipon)',
+                            data: savings,
+                            borderColor: '#ea580c',
+                            backgroundColor: '#ea580c',
+                            borderWidth: 3,
+                            pointRadius: 4,
+                            tension: 0.1
+                        },
+                        {
+                            label: 'Lifeline Fund (Instant Protection)',
+                            data: lifeline,
+                            borderColor: '#16a34a',
+                            backgroundColor: '#16a34a',
+                            borderWidth: 6, // Solid Green line
+                            pointRadius: 0,
+                            stepped: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: { weight: 'bold' },
+                                usePointStyle: true,
+                                padding: 20
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += '₱' + context.parsed.y.toLocaleString();
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: (value) => '₱' + (value/1000).toLocaleString() + 'k'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                maxRotation: 45,
+                                minRotation: 45
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        window.onload = calculate;
+    </script>
 </body>
 </html>
